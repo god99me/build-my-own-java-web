@@ -16,13 +16,14 @@ public class CustomerService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomerService.class);
 
-    public List<Customer> getCustomerList(String keyword) {
+    public List<Customer> getCustomerList() {
         String sql = "select * from customer";
         return DatabaseHelper.queryEntityList(Customer.class, sql);
     }
 
     public Customer getCustomer(long id) {
-        return null;
+        String sql = "select * from customer where id = ?";
+        return DatabaseHelper.queryEntity(Customer.class, sql, id);
     }
 
     public boolean createCustomer(Map<String, Object> fieldMap) {

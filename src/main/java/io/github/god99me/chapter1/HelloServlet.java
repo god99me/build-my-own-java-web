@@ -23,7 +23,7 @@ public class HelloServlet extends HttpServlet{
         DateFormat dataFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         String currentTime = dataFormat.format(new Date());
         req.setAttribute("currentTime", currentTime); // servlet - jsp hook
-        req.getRequestDispatcher("/WEB-INF/jsp/hello.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/view/hello.jsp").forward(req, resp);
         // debug 模式下运行，可以实现类的热部署以及断点调试
         // 对于社区版可能需要多一些配置达到相同的效果
     }

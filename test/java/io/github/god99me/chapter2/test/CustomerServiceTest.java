@@ -2,6 +2,7 @@ package io.github.god99me.chapter2.test;
 
 import io.github.god99me.chapter2.model.Customer;
 import io.github.god99me.chapter2.service.CustomerService;
+import io.github.god99me.chapter2.util.DatabaseHelper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,12 +25,13 @@ public class CustomerServiceTest {
 
     @Before
     public void init() {
-        // TODO 初始化数据库
+        // 重置数据库
+        DatabaseHelper.executeSqlFile("sql/customer_init.sql");
     }
 
     @Test
     public void getCustomerListTest() throws Exception {
-        List<Customer> customerList = customerService.getCustomerList("something?");
+        List<Customer> customerList = customerService.getCustomerList();
         Assert.assertEquals(2, customerList.size());
     }
 
