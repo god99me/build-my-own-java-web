@@ -20,4 +20,9 @@ public class StringUtil {
     public static boolean isNotEmpty(String str) {
         return !isEmpty(str);
     }
+
+    public static String[] splitString(String source, String delimiter) {
+        // TODO: 2017/5/3 dummy implemented
+        return source.split(delimiter);
+    }
 }
