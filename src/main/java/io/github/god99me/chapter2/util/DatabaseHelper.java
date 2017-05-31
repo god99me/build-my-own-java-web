@@ -21,7 +21,7 @@ import java.util.Properties;
 /**
  * Created by L.M.Y on 2017/4/28.
  */
-public class DatabaseHelper {
+public final class DatabaseHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseHelper.class);
 
     /*
@@ -39,7 +39,7 @@ public class DatabaseHelper {
     private static final BasicDataSource DATA_SOURCE;
 
     static {
-        CONNECTION_HOLDER = new ThreadLocal<Connection>();
+        CONNECTION_HOLDER = new ThreadLocal<>();
         QUERY_RUNNER = new QueryRunner();
 
         Properties conf = PropsUtil.loadPros("config.properties");
@@ -110,6 +110,7 @@ public class DatabaseHelper {
         return result;
     }
 
+    // 通用的执行更新语句的方法（包括 update, insert, delete）
     public static int executeUpdate(String sql, Object... params) {
         int affectedRows = 0;
         try {

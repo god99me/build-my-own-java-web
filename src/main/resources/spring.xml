@@ -2,15 +2,16 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- 扫描指定包， 将带有 Component 注解的类自动定义为 Spring Bean -->
     <context:component-scan base-package="io.github.god99me.chapter4.aop" />
 
-    <!--&lt;!&ndash; 配置一个代理 &ndash;&gt;-->
+    <!-- 1. 配置一个代理 -->
     <!--<bean id="greetingProxy" class="org.springframework.aop.framework.ProxyFactoryBean">-->
         <!--<property name="interfaces" value="io.github.god99me.chapter4.aop.Apology" />-->
 
@@ -30,22 +31,44 @@
         <!--&lt;!&ndash;<property name="interceptorNames" value="greetingAroundAdvice" />&ndash;&gt;-->
     <!--</bean>-->
 
-    <!-- 配置一个切面 -->
+    <!-- 2. 配置一个切面 -->
     <!-- 切面类
          1. DefaultPointcutAdvisor 默认切面 用于扩展自定义切面
          2. NameMatchMethodPointcutAdvisor 根据方法名称进行匹配的切面
          3. StaticMethodMatcherPointcutAdvisor 用于匹配静态方法的切面
     -->
 
-    <bean id="greetingAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
-        <property name="advice" ref="greetingAroundAdvice" />
-        <property name="pattern" value="io.github.god99me.chapter4.aop.GreetingImpl.good.*" />
-    </bean>
+    <!--<bean id="greetingAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">-->
+        <!--<property name="advice" ref="greetingAroundAdvice" />-->
+        <!--<property name="pattern" value="io.github.god99me.chapter4.aop.GreetingImpl.good.*" />-->
+    <!--</bean>-->
 
-    <!-- 配置一个代理 -->
-    <bean id="greetingProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
-        <property name="target" ref="greetingImpl" />
-        <property name="interceptorNames" value="greetingAdvisor" /> <!-- 不再是一个增强 （4种） 而是一个切面 -->
-        <property name="proxyTargetClass" value="true" />
-    </bean>
+    <!--&lt;!&ndash; 配置一个代理 &ndash;&gt;-->
+    <!--<bean id="greetingProxy" class="org.springframework.aop.framework.ProxyFactoryBean">-->
+        <!--<property name="target" ref="greetingImpl" />-->
+        <!--<property name="interceptorNames" value="greetingAdvisor" /> &lt;!&ndash; 不再是一个增强 （4种） 而是一个切面 &ndash;&gt;-->
+        <!--<property name="proxyTargetClass" value="true" />-->
+    <!--</bean>-->
+
+    <!-- 3. 自动代理：扫描 Bean 名称 -->
+    <!--&lt;!&ndash; 无法定义接口， 无法获知这些类实现了哪些接口， 只能代理类&ndash;&gt;-->
+    <!--<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">-->
+        <!--<property name="beanNames" value="*Impl" /> &lt;!&ndash; 为后缀是 Impl 的类自动生成代理 &ndash;&gt;-->
+        <!--<property name="interceptorNames" value="greetingAroundAdvice" />-->
+        <!--&lt;!&ndash; 所谓的优化是指， 如果该类有接口，就是用 JDK 动态代理， 否则使用 CGLib 代理类&ndash;&gt;-->
+        <!--<property name="optimize" value="true" />-->
+    <!--</bean>-->
+
+    <!-- 4. 自动代理：扫描切面配置-->
+    <!--<bean id="greetingAdvisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">-->
+        <!--<property name="pattern" value="io.github.god99me.chapter4.aop.GreetingImpl.good.*" />-->
+        <!--<property name="advice" ref="greetingAroundAdvice" />-->
+    <!--</bean>-->
+    <!--&lt;!&ndash; 扫描所有的切面类，并为之自动生成代理 &ndash;&gt;-->
+    <!--<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">-->
+        <!--<property name="optimize" value="true" />-->
+    <!--</bean>-->
+
+    <!-- 5. aspectJ + Spring-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
 </beans>
